@@ -1,0 +1,81 @@
+<div class="train train-list-item">
+    <div class="train-cover">
+        <a href="{% url "trainer:trainingsheet" train.id %}">
+            <img src="{{ train.cover.url }}" alt="Temporário">
+        </a>
+    </div>
+    <div class="train-title-container">
+        <h2 class="train-title">
+            <a href="{% url "trainer:trainingsheet" train.id %}">
+                {{ train.title }}
+            </a>
+        </h2>
+    </div>
+
+    <div class="train-author">
+        <span class="train-author-item">
+            <i class="fas fa-user"></i>
+            {{ train.author.first_name }} {{train.author.last_name}}
+        </span>
+        <span class="train-author-item">
+            <i class="fas fa-calendar-alt"></i>
+            {{train.created_at|date:"d/m/Y"}} às {{train.created_at|date:"H:i"}}
+        </span>
+        <span class="train-author-item">
+            <a href="/trains/category/cafe-da-manha/">
+                <i class="fas fa-layer-group"></i>
+                <span>{{train.category.name}}</span>
+            </a>
+        </span>
+    </div>
+
+    <div class="train-content">
+        <p>{{train.description}}</p>
+    </div>
+
+    <div class="train-meta-container">
+        <div class="train-meta train-preparation">
+            <h3 class="train-meta-title"><i class="fas fa-stopwatch"></i>Dias de Treino</h3>
+            <div class="train-meta-text">
+                {{train.preparation_time}} {{train.preparation_time_unit}}
+            </div>
+        </div>
+        <div class="train-meta train-servings">
+            <h3 class="train-meta-title"><i class="fa-solid fa-clipboard"></i>Séries semanal</h3>
+            <div class="train-meta-text">
+                {{train.servings}} {{train.servings_unit}}
+            </div>
+        </div>
+    </div>
+
+
+    {% if is_detail_page is not True %}
+        <footer class="train-footer">
+            <a class="train-read-more button button-dark button-full-width" href="{% url "trainer:trainingsheet" train.id %}">
+                <i class="fas fa-eye"></i>
+                <span>ver mais...</span>
+            </a>
+        </footer>
+    {% endif %}
+    
+
+    {% if is_detail_page is True %}
+        {% for _ in bfor %}
+            {% with random_get=get|random %}
+                <div class="main-train">
+                    <h2>{{ random_get }}</h2>
+                    <div class="exercises">
+                        <ul>
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                            <li>5</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endwith %}
+    {% endfor %}
+    {% endif %}
+
+</div>
