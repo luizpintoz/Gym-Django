@@ -279,12 +279,16 @@ h6 {
 
 }
 
-.exercises ul{
+.main-train > ul > li {
+    list-style: none;
+}
+
+.exercises-content ul{
     list-style: none;
     padding: 1.5rem;
 
 }
-.exercises {
+.exercises-content {
    display: flex;
    justify-content: center;
 

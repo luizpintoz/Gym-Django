@@ -1,6 +1,6 @@
 <div class="train train-list-item">
     <div class="train-cover">
-        <a href="{% url "trainer:trainingsheet" train.id %}">
+        <a href="{% url "trainer:trainingsheet" train.id%}">
             <img src="{{ train.cover.url }}" alt="Temporário">
         </a>
     </div>
@@ -15,17 +15,23 @@
     <div class="train-author">
         <span class="train-author-item">
             <i class="fas fa-user"></i>
-            {{ train.author.first_name }} {{train.author.last_name}}
+            {% if train.author is not None %}
+                {% if train.author.first_name %}
+                    {{ train.author.first_name }} {{train.author.last_name}}
+                {% else %}
+                    {{train.author.username}}
+                {% endif %}
+            {% else %}
+                Desconhecido
+            {% endif %}
         </span>
         <span class="train-author-item">
             <i class="fas fa-calendar-alt"></i>
             {{train.created_at|date:"d/m/Y"}} às {{train.created_at|date:"H:i"}}
         </span>
         <span class="train-author-item">
-            <a href="/trains/category/cafe-da-manha/">
-                <i class="fas fa-layer-group"></i>
-                <span>{{train.category.name}}</span>
-            </a>
+            <i class="fas fa-layer-group"></i>
+            <span>{{train.type}}</span>
         </span>
     </div>
 
@@ -35,15 +41,15 @@
 
     <div class="train-meta-container">
         <div class="train-meta train-preparation">
-            <h3 class="train-meta-title"><i class="fas fa-stopwatch"></i>Dias de Treino</h3>
+            <h3 class="train-meta-title"> <i class="fas fa-stopwatch"></i>Dias de Treino</h3>
             <div class="train-meta-text">
-                {{train.preparation_time}} {{train.preparation_time_unit}}
+                {{train.days}} Dias
             </div>
         </div>
         <div class="train-meta train-servings">
-            <h3 class="train-meta-title"><i class="fa-solid fa-clipboard"></i>Séries semanal</h3>
+            <h3 class="train-meta-title"><i class="fa-solid fa-clipboard"></i>Nível de Treino</h3>
             <div class="train-meta-text">
-                {{train.servings}} {{train.servings_unit}}
+                {{train.nivel_type}}
             </div>
         </div>
     </div>
@@ -60,22 +66,31 @@
     
 
     {% if is_detail_page is True %}
-        {% for _ in bfor %}
-            {% with random_get=get|random %}
-                <div class="main-train">
-                    <h2>{{ random_get }}</h2>
-                    <div class="exercises">
-                        <ul>
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                            <li>5</li>
-                        </ul>
-                    </div>
-                </div>
-            {% endwith %}
-    {% endfor %}
+        <div class="main-train">
+        
+                <!-- Percorre a list comprehension que foi criada na view -->
+                {% for body_part in body_parts %}
+
+                        {% if body_part not in list_body %}
+    
+                            <!-- Exibe o nome do membro -->
+                            <h2>{{ body_part.name }}</h2>
+
+                            <!-- Exibe os exercícios associados a este membro -->
+                            <ul>
+                                {% for exercise in exercises %}
+                                    {% if body_part in exercise.body_part.all %}
+                                        <li>{{ exercise }} {{ exercise.series }}x{{ exercise.repetitions }} carga {{ exercise.charge }}kg {{ exercise.rest_time }}min</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+
+                        {% endif %}
+
+                {% endfor %}
+
+        </div>
+
     {% endif %}
 
 </div>
